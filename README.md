@@ -37,6 +37,12 @@ graph TD
     end
 ```
 
+The system follows a clean, layered architecture where:
+- The Streamlit UI provides a user-friendly interface for document upload and processing
+- The Service Layer orchestrates business logic and processing flows
+- LangChain handles PDF processing and LLM interactions using GPT-4
+- The Database Layer manages data persistence through Supabase
+- Processing and Data flows are separated for better scalability and maintenance
 
 ### Component Architecture
 ```mermaid
@@ -77,6 +83,14 @@ graph TD
     B3 --> D3
 ```
 
+The component architecture demonstrates:
+- Clear separation of concerns across layers
+- Each component has a single responsibility
+- Core layer provides shared functionality
+- Services coordinate between UI and data layers
+- Repositories handle all database operations
+- Error handling and logging are centralized
+
 ### Processing Pipeline
 ```mermaid
 sequenceDiagram
@@ -95,6 +109,14 @@ sequenceDiagram
     DB-->>UI: Update Status
     UI-->>U: Show Results
 ```
+
+The processing pipeline illustrates:
+- Step-by-step document processing flow
+- User interaction points
+- Integration with GPT-4 for content analysis
+- Real-time status updates
+- Database persistence
+- Error handling at each step
 
 ### LangGraph Processing Flow
 ```mermaid
@@ -119,6 +141,14 @@ graph TD
         E --> L[Schema Validation]
     end
 ```
+
+The LangGraph flow shows:
+- PDF processing using PDFMiner for text extraction
+- Text chunking for optimal LLM processing
+- GPT-4 integration for content analysis
+- Structured data extraction with confidence scoring
+- Comprehensive error handling at each stage
+- Schema validation for data integrity
 
 ### Database Architecture
 ```mermaid
@@ -203,7 +233,7 @@ Required environment variables:
 SUPABASE_URL=your_supabase_url
 SUPABASE_KEY=your_supabase_key
 OPENAI_API_KEY=your_openai_key
-MODEL_NAME=gpt-4
+
 ```
 
 ## 🚦 Usage
