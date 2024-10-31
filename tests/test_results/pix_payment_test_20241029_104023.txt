@@ -1,0 +1,2 @@
+
+Error: Payment test failed: Failed to get token: No registered scope value for this client has been requested

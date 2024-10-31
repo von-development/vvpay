@@ -1,0 +1,23 @@
+1. Token Request:
+Successfully obtained access token
+
+2. Payment Request:
+URL: https://cdpj.partners.bancointer.com.br/banking/v2/pix
+Headers:
+  Content-Type: application/json
+  x-id-idempotente: 9688ee9f-9079-40e0-aff9-d80435eff915
+Payment Data:
+  {'valor': '1.00', 'dataPagamento': '2024-11-10', 'descricao': 'Test payment', 'destinatario': {'tipo': 'CHAVE', 'chave': '57276191000136'}}
+
+3. Response:
+Status Code: 403
+Response Headers:
+  Content-Type: application/json
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Rate-Limit-Remaining: 59
+  X-Rate-Limit-Time: 1730199043659
+  X-Request-Id: a4024e30-5b28-41ec-947c-3e1576ab8ad6
+  Date: Tue, 29 Oct 2024 10:49:43 GMT
+  Content-Length: 44
+Response Body:
+  {"message":"Faltando escopos necessários."}

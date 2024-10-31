@@ -4,7 +4,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
 build/
 develop-eggs/
 dist/
@@ -24,6 +23,7 @@ wheels/
 # Virtual Environment
 venv/
 ENV/
+.env
 
 # IDE
 .idea/
@@ -32,14 +32,22 @@ ENV/
 *.swo
 
 # Project specific
-.env
+logs/
 *.log
+docs/
+example/
 data/processed/*
 data/output/*
 data/uploads/*
 !data/processed/.gitkeep
 !data/output/.gitkeep
 !data/uploads/.gitkeep
+
+# Certificates and Keys
+*.crt
+*.key
+*.pem
+api/InterAPI*
 
 # Temp files
 *.tmp
@@ -50,6 +58,17 @@ tmp/
 *.db
 *.sqlite3
 
-# Logs
-logs/
-*.log 
+# Documentation
+docs/_build/
+docs/_static/
+docs/_templates/
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Sensitive directories
+/api/
+/data/
+/logs/
