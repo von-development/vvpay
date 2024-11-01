@@ -15,16 +15,19 @@ def validation_section():
     st.header("🔍 Validation")
     
     try:
-        # Get all extractions
+        # Get all extractions with proper order parameter
         extractions = get_records(
             "pdf_extractions",
-            order={"extracted_at": "desc"}
+            order={
+                "field": "extracted_at",
+                "direction": "desc"
+            }
         )
         
         if not extractions:
             st.info("No documents available for validation.")
             return
-
+        
         # Display metrics in columns
         col1, col2, col3 = st.columns(3)
         
@@ -111,7 +114,10 @@ def validation_section():
         # Show validation history if available
         validation_results = get_records(
             "validation_results",
-            order={"validated_at": "desc"},
+            order={
+                "field": "validated_at",
+                "direction": "desc"
+            },
             limit=5
         )
         

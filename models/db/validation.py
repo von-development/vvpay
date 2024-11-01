@@ -1,6 +1,6 @@
 """Validation database models"""
-from typing import Optional, List
-from datetime import datetime
+from typing import Optional, List, Dict
+from datetime import datetime, timezone
 from uuid import UUID
 from pydantic import BaseModel, Field
 
@@ -26,7 +26,10 @@ class ValidationResult(DBModelBase):
     )
     details: dict = Field(default_factory=dict, description="Additional validation details")
     notes: Optional[str] = Field(default=None, description="Additional notes")
-    validated_at: datetime = Field(..., description="Validation timestamp")
+    validated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="Validation timestamp"
+    )
 
 class ValidationControl(DBModelBase):
     """Database model for validation control"""

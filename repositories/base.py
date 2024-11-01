@@ -4,7 +4,7 @@ from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel
-from core.exceptions import DatabaseError, ErrorCode, ErrorSeverity
+from core.exceptions import DatabaseError
 from core.logging import get_logger
 from utils.db_utils import get_records, get_record_by_id, insert_record, update_record
 
@@ -28,8 +28,6 @@ class BaseRepository(Generic[T]):
             self.logger.error(f"Failed to fetch record", exc_info=e)
             raise DatabaseError(
                 message=f"Failed to fetch {self.table_name} record",
-                error_code=ErrorCode.DB_QUERY,
-                severity=ErrorSeverity.ERROR,
                 details={"record_id": str(record_id)},
                 original_error=e
             )
@@ -38,8 +36,7 @@ class BaseRepository(Generic[T]):
         self,
         filters: Optional[Dict] = None,
         limit: Optional[int] = None,
-        order_by: Optional[str] = None,
-        order_desc: bool = False
+        order: Optional[Dict[str, Dict[str, str]]] = None
     ) -> List[T]:
         """Get all records matching filters"""
         try:
@@ -47,16 +44,14 @@ class BaseRepository(Generic[T]):
                 self.table_name,
                 filters=filters,
                 limit=limit,
-                order_by=order_by,
-                order_desc=order_desc
+                order=order
             )
             return [self.model_class(**record) for record in results]
         except Exception as e:
             self.logger.error("Failed to fetch records", exc_info=e)
             raise DatabaseError(
                 message=f"Failed to fetch {self.table_name} records",
-                error_code=ErrorCode.DB_QUERY,
-                severity=ErrorSeverity.ERROR,
+                details={"error": str(e)},
                 original_error=e
             )
     
@@ -70,8 +65,7 @@ class BaseRepository(Generic[T]):
             self.logger.error("Failed to create record", exc_info=e)
             raise DatabaseError(
                 message=f"Failed to create {self.table_name} record",
-                error_code=ErrorCode.DB_ERROR,
-                severity=ErrorSeverity.ERROR,
+                details={"error": str(e)},
                 original_error=e
             )
     
@@ -85,8 +79,6 @@ class BaseRepository(Generic[T]):
             self.logger.error("Failed to update record", exc_info=e)
             raise DatabaseError(
                 message=f"Failed to update {self.table_name} record",
-                error_code=ErrorCode.DB_ERROR,
-                severity=ErrorSeverity.ERROR,
                 details={"record_id": str(record_id)},
                 original_error=e
             )

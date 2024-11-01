@@ -7,6 +7,7 @@ import json
 from decimal import Decimal
 import time
 from functools import wraps
+from uuid import UUID
 
 from postgrest.exceptions import APIError
 from supabase import create_client, Client
@@ -39,19 +40,29 @@ def retry_on_error(retries: int = 3, delay: float = 1.0):
         return wrapper
     return decorator
 
+def serialize_value(value: Any) -> Any:
+    """Serialize value for database operations with recursive UUID handling"""
+    if value is None:
+        return None
+    elif isinstance(value, datetime):
+        return value.isoformat()
+    elif isinstance(value, Decimal):
+        return float(value)
+    elif isinstance(value, Enum):
+        return value.value
+    elif isinstance(value, UUID):
+        return str(value)
+    elif isinstance(value, dict):
+        return {
+            k: serialize_value(v)
+            for k, v in value.items()
+        }
+    elif isinstance(value, (list, tuple)):
+        return [serialize_value(item) for item in value]
+    return value
+
 def serialize_data(data: Dict[str, Any]) -> Dict[str, Any]:
     """Serialize data for database operations"""
-    def serialize_value(value: Any) -> Any:
-        if isinstance(value, datetime):
-            return value.isoformat()
-        elif isinstance(value, Decimal):
-            return float(value)
-        elif isinstance(value, Enum):
-            return value.value
-        elif isinstance(value, (dict, list)):
-            return json.dumps(value)
-        return value
-
     # Fields to exclude from serialization
     exclude_fields = {'created_at'}
     
@@ -120,12 +131,11 @@ def get_records(
                     value = value.value
                 query = query.eq(key, value)
         
-        if order:
-            for field, direction in order.items():
-                if direction.lower() == 'desc':
-                    query = query.order(field, desc=True)
-                else:
-                    query = query.order(field)
+        if order and isinstance(order, dict):
+            field = order.get("field")
+            direction = order.get("direction", "asc")
+            if field:
+                query = query.order(field, desc=direction.lower() == "desc")
         
         if limit:
             query = query.limit(limit)
