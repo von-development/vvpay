@@ -1,6 +1,13 @@
 """UI style definitions"""
 from typing import Dict
 
+VALIDATION_COLORS = {
+    "VALID": "#28a745",    # Green
+    "INVALID": "#dc3545",  # Red
+    "PENDING": "#ffc107",  # Yellow
+    "DEFAULT": "#6c757d"   # Gray
+}
+
 def get_status_style(status: str) -> Dict[str, str]:
     """Get status display style"""
     return {

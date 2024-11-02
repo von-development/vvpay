@@ -11,9 +11,10 @@ class MetaTable(DBModelBase):
     cpf_cnpj: str = Field(..., description="CPF or CNPJ", index=True)
     tipo: str = Field(..., description="Provider type")
     pix: str = Field(..., description="PIX key")
-    ago_pc: Optional[Decimal] = Field(default=None, description="PC amount")
-    ago_bn: Optional[Decimal] = Field(default=None, description="Bonus amount")
-    ago_re: Optional[Decimal] = Field(default=None, description="Reembolso amount")
+    ago_pc: Optional[Decimal] = Field(default=None, description="August PC amount")
+    ago_bn: Optional[Decimal] = Field(default=None, description="August Bonus amount")
+    ago_re: Optional[Decimal] = Field(default=None, description="August Reembolso amount")
+    out_pc: Optional[Decimal] = Field(default=None, description="Outubro PC amount")
 
     class Config:
         """Model configuration"""
@@ -25,6 +26,7 @@ class MetaTable(DBModelBase):
                 "pix": "pix@example.com",
                 "ago_pc": 1000.00,
                 "ago_bn": None,
-                "ago_re": None
+                "ago_re": None,
+                "out_pc": None
             }
         } 

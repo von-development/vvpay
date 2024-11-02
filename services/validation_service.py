@@ -197,6 +197,40 @@ class ValidationService:
                 details={"error": str(e)},
                 original_error=e
             )
+    
+    def get_combined_validation_status(self) -> List[Dict]:
+        """Get combined status of extractions and validations"""
+        try:
+            # Get all extractions with their validation results
+            extractions = extraction_repository.get_all()
+            validation_results = validation_repository.get_all()
+            
+            # Create a lookup dictionary for validation results
+            validation_lookup = {
+                result.pdf_extraction_id: result
+                for result in validation_results
+            }
+            
+            combined_results = []
+            for extraction in extractions:
+                validation = validation_lookup.get(extraction.id)
+                combined_results.append({
+                    "payee_name": extraction.payee_name,
+                    "filename": extraction.file_name,
+                    "cnpj": extraction.cnpj,
+                    "payment_type": extraction.payment_type,
+                    "competence": extraction.competence,
+                    "value": extraction.valor,
+                    "status": validation.status if validation else extraction.status,
+                    "validation_date": validation.validated_at if validation else None,
+                    "validation_errors": validation.validation_errors if validation else None,
+                    "is_valid": validation.is_valid if validation else None
+                })
+            
+            return combined_results
+        except Exception as e:
+            logger.error("Failed to get combined status", exc_info=e)
+            raise
 
 # Create singleton instance
 validation_service = ValidationService()

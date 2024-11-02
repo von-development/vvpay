@@ -116,3 +116,14 @@ def get_settings() -> Settings:
 
 # Create settings instance
 settings = get_settings()
+
+# Add these exports after the settings instance creation
+INTER_CLIENT_ID = settings.INTER_CLIENT_ID
+INTER_CLIENT_SECRET = settings.INTER_CLIENT_SECRET
+INTER_CERT_FILE = settings.INTER_CERT_FILE
+INTER_KEY_FILE = settings.INTER_KEY_FILE
+PROJECT_ROOT = BASE_DIR
+API_DIR = BASE_DIR / "api"
+
+# Create API directory if it doesn't exist
+API_DIR.mkdir(parents=True, exist_ok=True)

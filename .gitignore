@@ -36,6 +36,7 @@ logs/
 *.log
 docs/
 example/
+scripts/
 data/processed/*
 data/output/*
 data/uploads/*
